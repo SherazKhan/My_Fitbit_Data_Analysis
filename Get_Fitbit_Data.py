@@ -128,9 +128,7 @@ def get_intraday_data(authd_client,authd_client2,start_date,end_date):
                     print('Please provide latest refresh and access tokens for oauth2. Exiting program.')
                     sys.exit(1)
                     
-                # Temperory pandas dataframes hold all the data before being merged to one big dataframe
-                # a = pd.DataFrame(steps_intra['activities-steps-intraday']['dataset'])
-                # print a['time']
+                # Temporary pandas dataframes hold all the data before being merged to one big dataframe
                 df_intra['time_intra'] = pd.DataFrame(steps_intra['activities-steps-intraday']['dataset'])['time']
                 df_intra['steps_intra'] = pd.DataFrame(steps_intra['activities-steps-intraday']['dataset'])['value'].astype(int)
                 df_intra['calories_intra'] = pd.DataFrame(calories_intra['activities-calories-intraday']['dataset'])['value'].astype(int)
@@ -205,7 +203,7 @@ with open('Data/Data_log_dates_intraday.csv') as csvfile:
 last_log_date = datetime.strptime(temp[1],"%Y-%m-%d")
 
 # Get intraday data for all days from last_log_date to yesterday
-df_master = get_intraday_data(authd_client,authd_client2,last_log_date,last_log_date+timedelta(1))
+df_master = get_intraday_data(authd_client,authd_client2,last_log_date,yesterday)
 
 # Add latest daily intra day data to daily data csv file
 write_fitbit_data_to_csv(df_master,'Data/Intraday_data.csv','Data/Data_log_dates_intraday.csv')
