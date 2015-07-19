@@ -17,7 +17,6 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 from datetime import timedelta
-import matplotlib.pyplot as plt
 import csv
 import sys, os
 from collections import deque
@@ -106,6 +105,7 @@ def get_intraday_data(authd_client,authd_client2,start_date,end_date):
         try:
             for single_date in daterange(start_date, end_date+timedelta(1)):
                 # Create a separate dataframe for intra day data
+                
                 df_intra = pd.DataFrame(columns=['time_intra','steps_intra','calories_intra','distance_intra'\
                                                  'elevation_intra','floors_intra','date'])
                 df_hr_intra = pd.DataFrame(columns=['time_intra','hr_intra'])
@@ -129,6 +129,8 @@ def get_intraday_data(authd_client,authd_client2,start_date,end_date):
                     sys.exit(1)
                     
                 # Temperory pandas dataframes hold all the data before being merged to one big dataframe
+                # a = pd.DataFrame(steps_intra['activities-steps-intraday']['dataset'])
+                # print a['time']
                 df_intra['time_intra'] = pd.DataFrame(steps_intra['activities-steps-intraday']['dataset'])['time']
                 df_intra['steps_intra'] = pd.DataFrame(steps_intra['activities-steps-intraday']['dataset'])['value'].astype(int)
                 df_intra['calories_intra'] = pd.DataFrame(calories_intra['activities-calories-intraday']['dataset'])['value'].astype(int)
@@ -203,7 +205,7 @@ with open('Data/Data_log_dates_intraday.csv') as csvfile:
 last_log_date = datetime.strptime(temp[1],"%Y-%m-%d")
 
 # Get intraday data for all days from last_log_date to yesterday
-df_master = get_intraday_data(authd_client,authd_client2,last_log_date,yesterday)
+df_master = get_intraday_data(authd_client,authd_client2,last_log_date,last_log_date+timedelta(1))
 
 # Add latest daily intra day data to daily data csv file
 write_fitbit_data_to_csv(df_master,'Data/Intraday_data.csv','Data/Data_log_dates_intraday.csv')
